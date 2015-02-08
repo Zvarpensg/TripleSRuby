@@ -18,7 +18,7 @@ bot = Cinch::Bot.new do
 			c.port = botJSON["port"]
 			c.ssl.use = botJSON["ssl"]
 
-			c.plugins.plugins = [Hello, FuckYeah, FML]
+			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact]
 			c.plugins.prefix = /^(!|#{c.nick}[,: ]*)/
 		end
 	else
