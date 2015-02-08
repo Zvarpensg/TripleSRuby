@@ -1,8 +1,10 @@
 {
   "nick":"TripleSRuby",
   "user":"TripleSRuby",
-  "password":"",
   "server":"irc.freenode.org",
+  "port": 6667,
+  "ssl": false,
+  "password":"",
   "channels":[
     ""
   ]

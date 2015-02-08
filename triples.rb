@@ -14,9 +14,15 @@ bot = Cinch::Bot.new do
 			c.server = botJSON["server"]
 			c.channels = botJSON["channels"]
 
+			c.password = botJSON["password"]
+			c.port = botJSON["port"]
+			c.ssl.use = botJSON["ssl"]
+
 			c.plugins.plugins = [Hello, FuckYeah, FML]
 			c.plugins.prefix = /^(!|#{c.nick}[,: ]*)/
 		end
+	else
+		abort("Need a 'bot.json' config file to start. Exiting...")
 	end
 end
 
