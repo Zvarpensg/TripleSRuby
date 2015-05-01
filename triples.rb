@@ -3,6 +3,7 @@
 require 'cinch'
 require 'json'
 require_relative 'irclistener'
+require_relative 'authentication'
 
 # require all plugins in plugins/
 Dir[File.dirname(__FILE__) + '/plugins/*.rb'].each {|file| require file }
@@ -24,8 +25,9 @@ bot = Cinch::Bot.new do
 			c.ssl.use = botJSON["ssl"]
 			c.listenPort = botJSON["listenport"]
 			c.listenAddress = botJSON["listenaddress"]
+			c.ops = botJSON["ops"]
 
-			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, CatFace]
+			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, CatFace, Permissions]
 			c.plugins.prefix = /^(!|#{c.nick}(?:[,:]{1} | ))/
 		end
 	else
