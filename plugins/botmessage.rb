@@ -6,8 +6,7 @@ class BotMessage
     puts data
     args = data.split
     if args.size >= 2
-      puts args[0]
-      Channel(args[0]).send "Message #{args[-1,1].join(' ')}"
+      Channel(args[0]).send args[1,args.size].join(' ')
     end
   end
 end

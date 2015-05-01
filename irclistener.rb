@@ -15,7 +15,7 @@ class IRCListener
 
   def start
     EM.run do
-      EM.start_server 'localhost', 4997, Server do |conn|
+      EM.start_server @bot.config.listenAddress, @bot.config.listenPort, Server do |conn|
         conn.bot = @bot
       end
     end
