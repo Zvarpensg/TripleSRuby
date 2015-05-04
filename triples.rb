@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 require 'cinch'
 require 'json'
 
@@ -6,8 +7,10 @@ Dir[File.dirname(__FILE__) + '/plugins/*.rb'].each {|file| require file }
 
 bot = Cinch::Bot.new do
 	if(File.exists?("./bot.json")) then
-		file = File.open("./bot.json").read
-		botJSON = JSON.parse file
+		botJSON = ""
+		File.open("./bot.json") do |file|
+			botJSON = JSON.parse file.read
+		end
 
 		configure do |c|
 			c.nick = botJSON["nick"]
