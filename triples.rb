@@ -21,7 +21,7 @@ bot = Cinch::Bot.new do
 			c.listenPort = botJSON["listenport"]
 			c.listenAddress = botJSON["listenaddress"]
 
-			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, BotMessage]
+			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact]
 			c.plugins.prefix = /^(!|#{c.nick}[,: ]*)/
 		end
 	else
