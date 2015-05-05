@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require 'cinch'
 require 'json'
+require_relative 'irclistener'
 
 # require all plugins in plugins/
 Dir[File.dirname(__FILE__) + '/plugins/*.rb'].each {|file| require file }
@@ -20,6 +21,8 @@ bot = Cinch::Bot.new do
 			c.password = botJSON["password"]
 			c.port = botJSON["port"]
 			c.ssl.use = botJSON["ssl"]
+			c.listenPort = botJSON["listenport"]
+			c.listenAddress = botJSON["listenaddress"]
 
 			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact]
 			c.plugins.prefix = /^(!|#{c.nick}[,: ]*)/
@@ -28,5 +31,6 @@ bot = Cinch::Bot.new do
 		abort("Need a 'bot.json' config file to start. Exiting...")
 	end
 end
-
+Thread.abort_on_exception=true
+Thread.new { IRCListener.new(bot).start }
 bot.start
