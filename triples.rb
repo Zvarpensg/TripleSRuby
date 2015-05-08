@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# encoding: utf-8
 require 'cinch'
 require 'json'
 require_relative 'irclistener'
@@ -24,7 +25,7 @@ bot = Cinch::Bot.new do
 			c.listenPort = botJSON["listenport"]
 			c.listenAddress = botJSON["listenaddress"]
 
-			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact]
+			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, CatFace]
 			c.plugins.prefix = /^(!|#{c.nick}(?:[,:]{1} | ))/
 		end
 	else
