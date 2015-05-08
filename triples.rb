@@ -25,7 +25,7 @@ bot = Cinch::Bot.new do
 			c.listenAddress = botJSON["listenaddress"]
 
 			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact]
-			c.plugins.prefix = /^(!|#{c.nick}[,: ]*)/
+			c.plugins.prefix = /^(!|#{c.nick}(?:[,:]{1} | ))/
 		end
 	else
 		abort("Need a 'bot.json' config file to start. Exiting...")
