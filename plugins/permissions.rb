@@ -7,6 +7,7 @@ class Permissions
   match /addgroup (.+)/, method: :addgroup
   match /deletegroup (.+)/, method: :deletegroup
   match /moduser (.+)/, method: :moduser
+  match /groups ?(.*)/, method: :groups
 
   def adduser(m, arg)
     # check proper command usage
@@ -70,7 +71,7 @@ class Permissions
       return
     end
 
-    if !/^[^\+-]+$/.match(args[0]).nil?
+    if /^[^\+-]+$/.match(args[0]).nil?
       m.channel.send("Characters +,- are forbidden in group names.")
       return
     end
@@ -146,6 +147,40 @@ class Permissions
     end
 
     m.channel.send("User %s modified." % args[0])
+  end
+
+  def groups(m, arg)
+    userID = 0
+    if arg == ""
+      userID = user_id @bot, m.user.nick
+    else
+      args = arg.split(" ")
+      puts "THING: %s" % args
+      if args.length != 1
+        m.channel.send "Usage: groups [NICK]"
+        return
+      end
+
+      require_groups(@bot, m, m.user.nick, ["ADMIN"]) or return
+
+      userID = user_id @bot, args[0]
+      if userID.nil?
+        m.channel.send "No groups for %s." % args[0]
+        return
+      end
+    end
+
+    res = @bot.config.database.execute(
+        "select groups.name from "\
+          "usergroups join groups on group_id=groups.id "\
+          "where user_id=?", userID
+    )
+    groups = []
+    res.each do |group|
+      groups.push group[0]
+    end
+
+    m.channel.send "Groups for %s: %s" % [arg == "" ? m.user.nick : args[0], groups.join(", ")]
   end
 
 end
