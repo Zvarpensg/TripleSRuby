@@ -35,3 +35,5 @@ build/
 
 bot.json
 Gemfile.lock
+packages/
+app.db

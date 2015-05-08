@@ -11,5 +11,6 @@
   "listenport": 1337,
   "listenaddress": "127.0.0.1",
   "ops":[
-  ]
+  ],
+  "database": "app.db"
 }

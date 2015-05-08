@@ -4,36 +4,54 @@ require 'cinch'
 require 'json'
 require_relative 'irclistener'
 require_relative 'authentication'
+require 'sqlite3'
 
 # require all plugins in plugins/
 Dir[File.dirname(__FILE__) + '/plugins/*.rb'].each {|file| require file }
 
-bot = Cinch::Bot.new do
-	if(File.exists?("./bot.json")) then
-		botJSON = ""
-		File.open("./bot.json") do |file|
-			botJSON = JSON.parse file.read
-		end
-
-		configure do |c|
-			c.nick = botJSON["nick"]
-			c.server = botJSON["server"]
-			c.channels = botJSON["channels"]
-
-			c.password = botJSON["password"]
-			c.port = botJSON["port"]
-			c.ssl.use = botJSON["ssl"]
-			c.listenPort = botJSON["listenport"]
-			c.listenAddress = botJSON["listenaddress"]
-			c.ops = botJSON["ops"]
-
-			c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, CatFace, Permissions]
-			c.plugins.prefix = /^(!|#{c.nick}(?:[,:]{1} | ))/
-		end
-	else
-		abort("Need a 'bot.json' config file to start. Exiting...")
-	end
+botJSON = ""
+if(File.exists?("./bot.json")) then
+	file = File.open("./bot.json").read
+	botJSON = JSON.parse file
+else
+	abort("Need a 'bot.json' config file to start. Exiting...")
 end
-Thread.abort_on_exception=true
-Thread.new { IRCListener.new(bot).start }
-bot.start
+
+SQLite3::Database.new botJSON["database"] do |db|
+	db.execute("PRAGMA foreign_keys = ON;") # disabled by default :(
+	bot = Cinch::Bot.new do
+			configure do |c|
+				c.nick = botJSON["nick"]
+				c.server = botJSON["server"]
+				c.channels = botJSON["channels"]
+
+				c.password = botJSON["password"]
+				c.port = botJSON["port"]
+				c.ssl.use = botJSON["ssl"]
+				c.listenPort = botJSON["listenport"]
+				c.listenAddress = botJSON["listenaddress"]
+				c.database = db
+
+				# this information is available from the database,
+				# however if you want to distinguish between people
+				# added in the config and at runtime use this array
+				c.ops = botJSON["ops"]
+
+				# Update database with ops. if the user was added previously with lower
+				# permissions they will be updated accordingly
+			  botJSON["ops"].each do |user|
+					db.execute "insert or ignore into users(nick) values (?)", user
+					db.execute "insert or ignore into groups(name) values ('ADMIN')"
+			    db.execute "insert or ignore into usergroups(user_id, group_id) values ("\
+											"(select id from users where nick=?), "\
+											"(select id from groups where name='ADMIN'))", user
+				end
+
+				c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, CatFace, Permissions]
+				c.plugins.prefix = /^(!|#{c.nick}(?:[,:]{1} | ))/
+			end
+	end
+	Thread.abort_on_exception=true
+	Thread.new { IRCListener.new(bot).start }
+	bot.start
+end
