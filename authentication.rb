@@ -1,32 +1,45 @@
 
 #TODO: persist data with sqlite, add permissions
 module Authentication
-
-  def user_has_groups?(bot, user, groups)
-    return get_missing_groups(bot, user, groups) == []
-  end
-
-  def get_missing_groups(bot, user, groups)
+  def get_groups(bot, user)
     res = bot.config.database.execute "select name from "\
-            "users join usergroups on users.id=user_id "\
-            "join groups on groups.id=group_id "\
-            "where nick=?", user
-    existingGroups = []
+        "users join usergroups on users.id=user_id "\
+        "join groups on groups.id=group_id "\
+        "where nick=?", user
+    groups = []
     res.each do |group|
-      existingGroups.push group[0]
+      groups.push group[0]
     end
-    
-    return groups - existingGroups
+
+    return groups
   end
 
-  def require_groups(bot, m, user, groups)
-    missingGroups = get_missing_groups(bot, m.user.nick, groups)
+  def has_groups(bot, m, groups)
+    missingGroups = groups - get_groups(bot, m.user.nick)
     if missingGroups != []
-      m.channel.send("You must be a member of groups: %s" % missingGroups.join(", "))
+      m.channel.send "You require group%s %s." % [missingGroups.length == 1 ? "" : "s:", missingGroups.join(", ")]
       return false
     end
 
     return true
+  end
+
+  def no_groups(bot, m, groups)
+    badGroups = groups & get_groups(bot, m.user.nick)
+    if badGroups != []
+      m.channel.send "You can't use this with group%s %s." % [badGroups.length == 1 ? "" : "s:", badGroups.join(", ")]
+      return false
+    end
+
+    return true
+  end
+
+  def admin_and_not_banned(bot, m)
+    return has_groups(bot, m, ["ADMIN"]) && no_groups(bot, m, ["BANNED"])
+  end
+
+  def not_banned?(bot, m)
+    return no_groups(bot, m, ["BANNED"])
   end
 
   def user_id(bot, user)

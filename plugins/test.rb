@@ -5,7 +5,7 @@ class Test
   match /test ?(.*)/, method: :test
 
   def test(m, args)
-    require_groups(@bot, m, m.user.nick, ["TEST"]) or return
+    has_groups(bot, m, ["TEST"]) and no_groups(bot, m, ["BANNED"]) or return
 
     m.channel.send "TEST!"
   end

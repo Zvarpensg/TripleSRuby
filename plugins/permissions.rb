@@ -8,16 +8,17 @@ class Permissions
   match /deletegroup (.+)/, method: :deletegroup
   match /moduser (.+)/, method: :moduser
   match /groups ?(.*)/, method: :groups
+  match /pluginban (.+)/, method: :pluginban
 
   def adduser(m, arg)
-    # check proper command usage
+
+    admin_and_not_banned(@bot, m) or return
+
     args = arg.split(" ")
     if args.length != 2
       m.channel.send("Usage: adduser NICK GROUP")
       return
     end
-
-    require_groups(@bot, m, m.user.nick, ["ADMIN"]) or return
 
     if user_exists?(@bot, args[0])
       m.channel.send("User %s already exists, if you wish to modify the user use moduser." % args[0])
@@ -38,17 +39,23 @@ class Permissions
   end
 
   def deleteuser(m, arg)
+
+    admin_and_not_banned(@bot, m) or return
+
     args = arg.split(" ")
     if args.length != 1
       m.channel.send "Usage: deleteuser NICK"
       return
     end
 
-    require_groups(@bot, m, m.user.nick, ["ADMIN"]) or return
-
     userID = user_id(@bot, args[0])
     if userID.nil?
       m.channel.send("No such user %s." % args[0])
+      return
+    end
+
+    if args[0] == @bot.config.owner
+      m.channel.send "Can't delete the bot's owner."
       return
     end
 
@@ -57,13 +64,14 @@ class Permissions
   end
 
   def addgroup(m, arg)
+
+    admin_and_not_banned(@bot, m) or return
+
     args = arg.split(" ")
     if args.length != 1
       m.channel.send "Usage: addgroup GROUP"
       return
     end
-
-    require_groups(@bot, m, m.user.nick, ["ADMIN"]) or return
 
     groupID = group_id(@bot, args[0])
     if !groupID.nil?
@@ -81,6 +89,8 @@ class Permissions
   end
 
   def deletegroup(m, arg)
+    admin_and_not_banned(@bot, m) or return
+
     args = arg.split(" ")
     if args.length != 1
       m.channel.send "Usage: deletegroup GROUP"
@@ -105,17 +115,20 @@ class Permissions
   end
 
   def moduser(m, arg)
-    valid = /^((\+|-)?\w+\ ?)*$/
+
+    admin_and_not_banned(@bot, m) or return
+
+    valid = /^(\+|-)(\w+) ?((\+|-)?\w+ ?)*$/ # a word preceded by a plus or minus followed by any number of words
+                                             # with an optional plus or minus. I.E +ADMIN TEST -BANNED
 
     args = arg.split(" ")
     groups = args[1, args.length]
     match = valid.match groups.join(" ")
+    puts match
     if args.length < 2 || match.nil?
       m.channel.send("Usage: USER (+|-)GROUPS")
       return
     end
-
-    require_groups(@bot, m, m.user.nick, ["ADMIN"]) or return
 
     userID = user_id(@bot, args[0])
     if userID.nil?
@@ -125,6 +138,7 @@ class Permissions
     currentOperator = ""
     missingGroups = []
 
+    changesDone = false
     groups.each do |group|
       if ["-", "+"].include? group[0]
         currentOperator = group[0]
@@ -136,51 +150,63 @@ class Permissions
           missingGroups.push group
           next
         end
+        if group == "BANNED" && args[0] == @bot.config.owner
+          m.channel.send "You can't ban the bot's owner."
+          next
+        end
         @bot.config.database.execute "insert or ignore into usergroups(user_id, group_id) values (?, ?)", [userID, groupID]
+        changesDone = true
       elsif currentOperator == "-"
+        if group == "ADMIN" && args[0] == @bot.config.owner
+          m.channel.send "You can't remove the bots owner from ADMIN."
+          next
+        end
         @bot.config.database.execute "delete from usergroups where user_id=? and group_id=?", [userID, groupID]
+        changesDone = true
       end
     end
 
     if missingGroups != []
-      m.channel.send("The following groups are missing: %s" % missingGroups.join(", "))
+      m.channel.send("The following groups do not exists: %s" % missingGroups.join(", "))
     end
 
-    m.channel.send("User %s modified." % args[0])
+    if changesDone
+      m.channel.send("User %s modified." % args[0])
+    end
   end
 
   def groups(m, arg)
-    userID = 0
+    no_groups(bot, m, ["BANNED"]) or return
+
+    groups = []
     if arg == ""
-      userID = user_id @bot, m.user.nick
+      groups = get_groups(bot, m.user.nick)
     else
+      has_groups(bot, m, ["ADMIN"]) or return
       args = arg.split(" ")
-      puts "THING: %s" % args
       if args.length != 1
         m.channel.send "Usage: groups [NICK]"
         return
       end
 
-      require_groups(@bot, m, m.user.nick, ["ADMIN"]) or return
-
-      userID = user_id @bot, args[0]
-      if userID.nil?
+      if !user_exists?(bot, args[0])
         m.channel.send "No groups for %s." % args[0]
         return
       end
-    end
 
-    res = @bot.config.database.execute(
-        "select groups.name from "\
-          "usergroups join groups on group_id=groups.id "\
-          "where user_id=?", userID
-    )
-    groups = []
-    res.each do |group|
-      groups.push group[0]
+      groups = get_groups(bot, args[0])
     end
 
     m.channel.send "Groups for %s: %s" % [arg == "" ? m.user.nick : args[0], groups.join(", ")]
   end
 
+  def pluginban(m, arg)
+
+    args = arg.split(" ")
+    if args.length != 1
+      print "Usage: pluginban USER"
+    end
+
+    moduser(m, args[0]+ " +BANNED")
+  end
 end

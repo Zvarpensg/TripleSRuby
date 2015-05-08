@@ -32,20 +32,18 @@ SQLite3::Database.new botJSON["database"] do |db|
 				c.listenAddress = botJSON["listenaddress"]
 				c.database = db
 
-				# this information is available from the database,
-				# however if you want to distinguish between people
-				# added in the config and at runtime use this array
-				c.ops = botJSON["ops"]
+				# The owner can't be removed or banned for security purposes
+				c.owner = botJSON["owner"]
 
-				# Update database with ops. if the user was added previously with lower
+				# Update database with owner. if the user was added previously with lower
 				# permissions they will be updated accordingly
-			  botJSON["ops"].each do |user|
-					db.execute "insert or ignore into users(nick) values (?)", user
-					db.execute "insert or ignore into groups(name) values ('ADMIN')"
-			    db.execute "insert or ignore into usergroups(user_id, group_id) values ("\
-											"(select id from users where nick=?), "\
-											"(select id from groups where name='ADMIN'))", user
-				end
+
+				db.execute "insert or ignore into users(nick) values (?)", c.owner
+				db.execute "insert or ignore into groups(name) values ('ADMIN')"
+				db.execute "insert or ignore into groups(name) values ('BANNED')"
+		    db.execute "insert or ignore into usergroups(user_id, group_id) values ("\
+										"(select id from users where nick=?), "\
+										"(select id from groups where name='ADMIN'))", c.owner
 
 				c.plugins.plugins = [Hello, FuckYeah, FML, CatFact, CatFace, Test, Permissions]
 				c.plugins.prefix = /^(!|#{c.nick}(?:[,:]{1} | ))/
