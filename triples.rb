@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 # encoding: utf-8
+require 'rubygems'
+require 'bundler/setup'
 require 'cinch'
 require 'json'
 require_relative 'irclistener'
