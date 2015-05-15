@@ -1,4 +1,6 @@
 #!/usr/bin/ruby
+require 'rubygems'
+require 'bundler/setup'
 require 'sqlite3'
 require 'json'
 botJSON = ""
