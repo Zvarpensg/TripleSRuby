@@ -1,5 +1,4 @@
 
-#TODO: persist data with sqlite, add permissions
 module Authentication
   def get_groups(bot, user)
     res = bot.config.database.execute "select name from "\
@@ -40,6 +39,15 @@ module Authentication
 
   def not_banned?(bot, m)
     return no_groups(bot, m, ["BANNED"])
+  end
+
+  def add_user(bot, user)
+    @bot.config.database.execute "insert into users(nick) values (?)", user
+    return @bot.config.database.last_insert_row_id()
+  end
+
+  def delete_user(bot, user)
+    @bot.config.database.execute "delete from users where nick=?", user
   end
 
   def user_id(bot, user)

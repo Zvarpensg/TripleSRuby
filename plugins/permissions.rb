@@ -2,66 +2,12 @@ class Permissions
   include Cinch::Plugin
   include Authentication
 
-  match /adduser (.+)/, method: :adduser
-  match /deleteuser (.+)/, method: :deleteuser
+
   match /addgroup (.+)/, method: :addgroup
-  match /deletegroup (.+)/, method: :deletegroup
-  match /moduser (.+)/, method: :moduser
+  match /delgroup (.+)/, method: :delgroup
+  match /setuser (.+)/, method: :setuser
   match /groups ?(.*)/, method: :groups
   match /pluginban (.+)/, method: :pluginban
-
-  def adduser(m, arg)
-
-    admin_and_not_banned(@bot, m) or return
-
-    args = arg.split(" ")
-    if args.length != 2
-      m.channel.send("Usage: adduser NICK GROUP")
-      return
-    end
-
-    if user_exists?(@bot, args[0])
-      m.channel.send("User %s already exists, if you wish to modify the user use moduser." % args[0])
-      return
-    end
-
-    # check group exists and obtain ID
-    groupID = group_id(@bot, args[1])
-    if groupID.nil?
-      m.channel.send("No such group %s." % args[1])
-      return
-    end
-
-    @bot.config.database.execute "insert into users(nick) values (?)", args[0]
-    newUserID = @bot.config.database.last_insert_row_id()
-    @bot.config.database.execute "insert into usergroups(user_id, group_id) values (?, ?)", [newUserID, groupID]
-    m.channel.send("Added user %s." % args[0])
-  end
-
-  def deleteuser(m, arg)
-
-    admin_and_not_banned(@bot, m) or return
-
-    args = arg.split(" ")
-    if args.length != 1
-      m.channel.send "Usage: deleteuser NICK"
-      return
-    end
-
-    userID = user_id(@bot, args[0])
-    if userID.nil?
-      m.channel.send("No such user %s." % args[0])
-      return
-    end
-
-    if args[0] == @bot.config.owner
-      m.channel.send "Can't delete the bot's owner."
-      return
-    end
-
-    @bot.config.database.execute "delete from users where id=?", userID
-    m.channel.send("User %s deleted." % args[0])
-  end
 
   def addgroup(m, arg)
 
@@ -88,7 +34,7 @@ class Permissions
     m.channel.send "Added group %s." % args[0]
   end
 
-  def deletegroup(m, arg)
+  def delgroup(m, arg)
     admin_and_not_banned(@bot, m) or return
 
     args = arg.split(" ")
@@ -114,7 +60,7 @@ class Permissions
     m.channel.send "Group %s deleted." % args[0]
   end
 
-  def moduser(m, arg)
+  def setuser(m, arg)
 
     admin_and_not_banned(@bot, m) or return
 
@@ -132,7 +78,7 @@ class Permissions
 
     userID = user_id(@bot, args[0])
     if userID.nil?
-      m.channel.send("User %s does not exist." % args[0])
+      userID = add_user(@bot, args[0])
     end
 
     currentOperator = ""
@@ -171,6 +117,9 @@ class Permissions
     end
 
     if changesDone
+      if get_groups(@bot, args[0]) == [] # delete users with no groups
+        delete_user(@bot, args[0])
+      end
       m.channel.send("User %s modified." % args[0])
     end
   end
