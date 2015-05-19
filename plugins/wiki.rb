@@ -16,7 +16,6 @@ class Wiki
     end
 
     api = "http://en.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts%%7Cinfo&exchars=300&explaintext&inprop=url&redirects"
-    puts (api % URI::encode(args))
     page = pageForTitle (api % URI::encode(args))
     extract = page["extract"]
     if extract.nil?
@@ -31,10 +30,19 @@ class Wiki
       end
 
     end
+
     if extract.length > 350 # just in case wikipedia goes crazy and joins skynet
       extract = extract[0,350]
     end
-    m.channel.send extract
+
+    lines = extract.split("\n")
+    lines.reject! {|c| c.empty? }
+    if lines.length > 5
+      puts lines.join ", "
+      lines = lines[0, 5]
+    end
+
+    m.channel.send lines.join("\n")
     m.channel.send page["fullurl"]
   end
 end
