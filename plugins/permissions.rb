@@ -156,6 +156,6 @@ class Permissions
       print "Usage: pluginban USER"
     end
 
-    moduser(m, args[0]+ " +BANNED")
+    setuser(m, args[0]+ " +BANNED")
   end
 end
