@@ -8,6 +8,7 @@ class Wiki
   match /wiki (.+)/, method: :wiki
 
   def wiki(m, args)
+    no_groups(@bot, m, ["BANNED"]) or return
 
     def pageForTitle(encodedUrl)
       resp = JSON.parse open(encodedUrl).read
