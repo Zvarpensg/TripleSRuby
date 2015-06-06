@@ -70,7 +70,6 @@ class Permissions
     args = arg.split(" ")
     groups = args[1, args.length]
     match = valid.match groups.join(" ")
-    puts match
     if args.length < 2 || match.nil?
       m.channel.send("Usage: USER (+|-)GROUPS")
       return
