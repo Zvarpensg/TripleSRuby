@@ -47,7 +47,7 @@ SQLite3::Database.new botJSON["database"] do |db|
 										"(select id from users where nick=?), "\
 										"(select id from groups where name='ADMIN'))", c.owner
 
-				c.plugins.plugins = [FuckYeah, FML, CatFact, CatFace, Test, Permissions, Wiki, ManagePlugins, Hello]
+				c.plugins.plugins = botJSON["plugins"].map {|plugin| Object.const_get plugin }
 				c.plugins.prefix = /^(?:!|#{c.nick}(?:[,:]{1} | ))/
 			end
 	end
