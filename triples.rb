@@ -53,5 +53,6 @@ SQLite3::Database.new botJSON["database"] do |db|
 	end
 	Thread.abort_on_exception=true
 	Thread.new { IRCListener.new(bot).start }
+	bot.loggers.level = :info
 	bot.start
 end
