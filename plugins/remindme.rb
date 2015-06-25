@@ -62,6 +62,7 @@ class RemindMe
 		if (futureDate < currentTime)
 			m.channel.send("I don't have a time machine.")
 		else
+			m.channel.send("Okay, will remind you #{args.include?("in ")? "" : "in "}#{args}")
 			unsentReminder = Reminder.new(input[0][1], futureDate)
 			addNewReminder(m.user.nick, m.channel.name, unsentReminder)
 			@bot.config.database.execute(
