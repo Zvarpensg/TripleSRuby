@@ -7,12 +7,12 @@ class Seen
 
 
 	def execute(m, arg)
-		not_banned(@bot, m) or return
+		not_banned?(@bot, m) or return
 		resp = @bot.config.database.execute "select lasttext,seendate from seen where nick=? and channel=?", [arg, m.channel.name]
 		if resp.empty?
 			m.channel.send "I've never seen #{arg}"
 		else
-			m.channel.send "#{arg} was last seen at #{resp[0][1]} saying #{resp[0][0]}"
+			m.channel.send "#{arg} was last seen at #{DateTime.parse(resp[0][1]).to_time} saying #{resp[0][0]}"
 		end
 	end
 

@@ -44,4 +44,4 @@ CREATE TABLE seen(
   lasttext TEXT NOT NULL
 );
 
-CREATE UNIQUE INDEX seenindex on seen(nick);
+CREATE UNIQUE INDEX seenindex on seen(nick, channel);
