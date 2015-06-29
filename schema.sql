@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS usergroups;
 DROP TABLE IF EXISTS reminders;
+DROP TABLE IF EXISTS seen;
 
 CREATE TABLE users(
   id INTEGER PRIMARY KEY,
@@ -34,3 +35,13 @@ CREATE TABLE reminders(
 );
 
 CREATE INDEX remindersindex on reminders(nick);
+
+CREATE TABLE seen(
+  id INTEGER PRIMARY KEY,
+  nick TEXT NOT NULL,
+  channel TEXT NOT NULL,
+  seendate DATETIME NOT NULL,
+  lasttext TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX seenindex on seen(nick, channel);
