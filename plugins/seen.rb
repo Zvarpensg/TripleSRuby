@@ -3,12 +3,13 @@ class Seen
 	include Authentication
 
 	listen_to :message
-	match /seen ([^ ]+)$/
+	match /seen ([^ ]+) ?$/
 
 
 	def execute(m, arg)
 		not_banned?(@bot, m) or return
 		resp = @bot.config.database.execute "select lasttext,seendate from seen where nick=? and channel=?", [arg, m.channel.name]
+
 		if resp.empty?
 			m.channel.send "I've never seen #{arg}"
 		else
