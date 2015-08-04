@@ -8,7 +8,6 @@ class Anagram
 	match /anagram (.+)/i
 
 	def execute(m, arg)
-		puts "Anagram?"
 		not_banned?(@bot, m) or return
 
 		response = Net::HTTP.post_form(
