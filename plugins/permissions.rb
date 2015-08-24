@@ -130,13 +130,13 @@ class Permissions
     if arg == ""
       groups = get_groups(bot, m.user.nick)
     else
-      has_groups(bot, m, ["ADMIN"]) or return
       args = arg.split(" ")
       if args.length != 1
         m.channel.send "Usage: groups [NICK]"
         return
       end
 
+      has_groups(bot, m, ["ADMIN"]) || args[0] == m.user.nick or return
       if !user_exists?(bot, args[0])
         m.channel.send "No groups for %s." % args[0]
         return

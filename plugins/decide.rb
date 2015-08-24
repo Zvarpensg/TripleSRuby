@@ -15,6 +15,6 @@ class Decide
 		end
 		
 		gen = Random.new
-		m.channel.send "#{m.user.nick}: you should #{args[gen.rand(args.size)].strip}"
+		m.channel.send "#{m.user.nick}: #{args[gen.rand(args.size)].strip}"
 	end
 end
