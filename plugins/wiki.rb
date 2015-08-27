@@ -16,7 +16,7 @@ class Wiki
       return page
     end
 
-    api = "http://en.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts%%7Cinfo&exchars=300&explaintext&inprop=url&redirects"
+    api = "https://en.wikipedia.org/w/api.php?format=json&action=query&titles=%s&prop=extracts%%7Cinfo&exchars=300&explaintext&inprop=url&redirects"
     page = pageForTitle (api % URI::encode(args))
     extract = page["extract"]
     if extract.nil?
