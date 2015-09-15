@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS usergroups;
 DROP TABLE IF EXISTS reminders;
 DROP TABLE IF EXISTS seen;
+DROP TABLE IF EXISTS music;
 
 CREATE TABLE users(
   id INTEGER PRIMARY KEY,
@@ -45,3 +46,9 @@ CREATE TABLE seen(
 );
 
 CREATE UNIQUE INDEX seenindex on seen(nick, channel);
+
+CREATE TABLE music(
+  id INTEGER PRIMARY KEY,
+  channel TEXT NOT NULL,
+  link TEXT NOT NULL
+);
