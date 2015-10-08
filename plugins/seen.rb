@@ -18,6 +18,9 @@ class Seen
 	end
 
 	def listen(args)
+        if args.channel.nil?
+            return
+        end
 		@bot.config.database.execute "insert or replace into seen (nick, channel, lasttext, seendate) values (?, ?, ?, ?)", [args.user.nick, args.channel.name, args.params[1], DateTime.now.to_s]
 	end
 
