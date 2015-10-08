@@ -19,25 +19,40 @@ class RemindMe
 	def humanDatetoTime(humanDate)
 		validwords = ["second", "minute", "hour", "day", "week", "month", "year"]
 
-		groups = humanDate.scan(/(\d+ [a-zA-Z]+)+/)
+		groups = humanDate.scan(/([\d\.]+ [a-zA-Z]+)+/)
 		!groups.nil? or return nil
 
 
 		times = Hash[groups.map { |group| group[0].split(" ").reverse! }.map {|unit, num| [unit.end_with?("s") ? unit[0..unit.length-2] : unit, num] }]
-
 		if times.keys.any? {|unit| !validwords.include? unit }
 			return nil
 		end
+		
+		carry = 0
 
+		# for each unit starting with year, carry the decimal portion if it has one
+		validwords.reverse.each do |unit|
+			num = times.fetch(unit, 0).to_s
+			if !(num.include? ".")
+				times[unit] = Integer(num) + carry
+			else
+				thisunit, nextunit = num.split(".")
+				times[unit] = Integer(thisunit) + carry
+				carry = Integer(nextunit)
+			end
+		end
+		# the last carry is ignored because why handle fractions of a second
+		
+		return formatTime(times.fetch("year", 0), times.fetch("month", 0), times.fetch("day", 0), times.fetch("hour", 0), times.fetch("minute", 0), times.fetch("second", 0))
+	end
+	
+	def formatTime(year, month, day, hour, minute, second)
 		# yes, this is ridiculous. no, there's not a better way.
 		finalTime = DateTime.now
-		finalTime = finalTime >> (Integer(times.fetch("year", 0)) * 12)
-		finalTime = finalTime >> (Integer(times.fetch("month", 0)))
-		finalTime = finalTime + (Integer(times.fetch("day", 0)))
+		finalTime = finalTime >> (year * 12 + month)
+		finalTime = finalTime + day
 		finalTime = finalTime.to_time
-		finalTime = finalTime + (Integer(times.fetch("hour", 0))*60*60)
-		finalTime = finalTime + (Integer(times.fetch("minute", 0))*60)
-		finalTime = finalTime + (Integer(times.fetch("second", 0)))
+		finalTime = finalTime + hour * 60 * 60 + minute * 60 + second
 		return finalTime
 	end
 
