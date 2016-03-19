@@ -8,6 +8,6 @@ class Fortune
 	def execute(m)
 		not_banned(@bot, m) or return
 
-		respone = `fortune`
+		m.reply `fortune`
 	end
 end
