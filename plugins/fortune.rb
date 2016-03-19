@@ -9,7 +9,7 @@ class Fortune
 		not_banned?(@bot, m) or return
 
 		fortune = `fortune`.gsub(/\t/, ' ')
-		if fortune.lines.length > 4
+		if fortune.lines.size > 4
 			m.user.send fortune
 		else
 			m.reply fortune
