@@ -6,7 +6,7 @@ class Fortune
 	match "fortune"
 
 	def execute(m)
-		not_banned(@bot, m) or return
+		not_banned?(@bot, m) or return
 
 		m.reply `fortune`
 	end
