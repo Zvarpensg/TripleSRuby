@@ -8,6 +8,11 @@ class Fortune
 	def execute(m)
 		not_banned?(@bot, m) or return
 
-		m.reply `fortune`
+		fortune = `fortune`.gsub(/\t/, ' ')
+		if fortune.lines.length > 4
+			m.user.send fortune
+		else
+			m.reply fortune
+		end
 	end
 end
