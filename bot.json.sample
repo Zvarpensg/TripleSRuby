@@ -13,6 +13,6 @@
   "owner": "",
   "database": "app.db",
   "plugins":[
-    "FuckYeah", "FML", "CatFact", "CatFace", "Test", "Permissions", "Wiki", "ManagePlugins", "Hello"
+    "FuckYeah", "FML", "CatFact", "CatFace", "Test", "Permissions", "Wiki", "ManagePlugins", "Hello", "FrogTips"
   ]
 }
