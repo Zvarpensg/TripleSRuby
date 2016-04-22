@@ -11,7 +11,7 @@
   "listenport": 1337,
   "listenaddress": "127.0.0.1",
   "owner": "",
-  "database": "app.db"
+  "database": "app.db",
   "plugins":[
     "FuckYeah", "FML", "CatFact", "CatFace", "Test", "Permissions", "Wiki", "ManagePlugins", "Hello"
   ]
