@@ -6,7 +6,7 @@ class FrogTips
 	include Authentication
 
 	def make_request(m, arg = '')
-		url = "http://frog.tips/api/1/tips/#{arg}"
+		url = "https://frog.tips/api/1/tips/#{arg}"
 		resp = Net::HTTP.get_response(URI(url))
 		if resp.code_type == Net::HTTPOK
 			return JSON.parse(resp.body)
