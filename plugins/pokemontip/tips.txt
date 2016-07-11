@@ -12,3 +12,14 @@ You can spin the ball before you throw it for a curve ball bonus
 At gyms, you can dodge by swiping left or right
 If you get an evolved version of a Pokemon, transfer all your previous tier so you get the candy
 Brustling grass shows you where pokemon might be
+Each footstep on the nearby pokemon corresponds to 100m intervals
+In a gym battle, you can swype left and right to dodge attacks
+In a gym battle, try to keep taps about a second inbetween to avoid glitches
+If you swing your phone in a circle, attach to a bike wheel, or put on a turn table the GPS will walk you in circles gathering precious egg hatching distance
+Using lures at a pokestop increases pokemon spawns globally in the area for 30 minutes
+Max XP gain by using a lucky egg, lure at a pokestop, and close to hatching incubators for that double XP
+Any speed of 15mph won't count towards an egg hatching
+Before a pokeball throw, spin it in a circle to get a curved ball bonus
+The smaller the inner circle, the great chance of catching a pokemon
+Throw a pokeball into the smallest inner circle for nice, great, excellent, or perfect throw bonuses
+You can attack your own gym to strengthed the level, every 2-3 levels you can put another pokemon as defense
