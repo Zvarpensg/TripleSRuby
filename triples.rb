@@ -11,6 +11,9 @@ require 'sqlite3'
 # require all plugins in plugins/
 Dir[File.dirname(__FILE__) + '/plugins/*.rb'].each {|file| require file }
 
+#nested plugins too
+Dir[File.dirname(__FILE__) + '/plugins/*/*.rb'].each {|file| require file }
+
 botJSON = ""
 if(File.exists?("./bot.json")) then
 	file = File.open("./bot.json").read
