@@ -1,25 +1,23 @@
-Gyms are hella buggy right now, almost not worth the aggravation
-If you're driving, grab a Pokemon stop quickly, spin the coin and hit the X. You'll still get the items before the game says too far
-You can catch Pokemon outside your sphere of influence as long as it spawned
-If you can't rotate your screen, game froze and nothing will spawn so relaunch it
+Gyms are hella buggy right now and are almost not worth the aggravation
+If you're driving, tap a Pokestop quickly, spin the coin, and hit the X. You'll still get the items before the game says you've gone too far
+You can catch Pokemon outside your sphere of influence as long as it already spawned
+If you can't rotate your screen, the game froze and nothing will spawn so relaunch it
 Turn off your phone's automatic screen brightness setting to save batteries
-If you turn battery saver on, tilt your phone upside down to blank the screen while still keeping it in the forefront
+If you turn battery saver on, tilt your phone upside down to blank the screen while still keeping the game in the foreground
 Leave sounds or vibration on to know when a Pokemon is near
-You can pickup pokeballs you miss, just tap on them before they disappear
+You can pickup Pokeballs you miss. Just tap on them before they disappear
 Turn off augmented reality to make it easier to catch Pokemon
-Max a pokemon's CP before evolving to get the most gain
-You can spin the ball before you throw it for a curve ball bonus
-At gyms, you can dodge by swiping left or right
-If you get an evolved version of a Pokemon, transfer all your previous tier so you get the candy
-Brustling grass shows you where pokemon might be
-Each footstep on the nearby pokemon corresponds to 100m intervals
-In a gym battle, you can swype left and right to dodge attacks
-In a gym battle, try to keep taps about a second inbetween to avoid glitches
-If you swing your phone in a circle, attach to a bike wheel, or put on a turn table the GPS will walk you in circles gathering precious egg hatching distance
-Using lures at a pokestop increases pokemon spawns globally in the area for 30 minutes
-Max XP gain by using a lucky egg, lure at a pokestop, and close to hatching incubators for that double XP
-Any speed of 15mph won't count towards an egg hatching
-Before a pokeball throw, spin it in a circle to get a curved ball bonus
-The smaller the inner circle, the great chance of catching a pokemon
-Throw a pokeball into the smallest inner circle for nice, great, excellent, or perfect throw bonuses
-You can attack your own gym to strengthed the level, every 2-3 levels you can put another pokemon as defense
+Max a Pokemon's CP before evolving to get the most gain
+You can spin the ball in a full circle before you throw it for a curve ball bonus
+If you evolve a Pokemon, transfer all of your previous tier for the candy
+Rustling grass shows you where Pokemon might be
+Each footstep on the nearby Pokemon list corresponds to 100m intervals
+In a gym battle, you can swipe left and right to dodge attacks
+In a gym battle, try to keep about a second between taps to avoid glitches
+If you swing your phone in a circle, attach it to a bike wheel, or put it on a turntable the GPS will walk you in circles, gathering precious egg hatching distance
+Using a lure at a Pokestop increases Pokemon spawns globally in the area for 30 minutes
+Max XP gain: use a lucky egg with lure at a Pokestop when incubators are close to hatching
+Any speed of 15mph or greater won't count towards an egg hatching
+The smaller the inner circle, the great chance of catching a Pokemon
+Throw a Pokeball into the smallest inner circle for nice, great, excellent, or perfect throw bonuses
+You can attack your own gym to strengthen the level, every 2-3 levels you can put another Pokemon as defense
